@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //对传入的参数进行判定，实现多态;
+    function Add () {
+        function zero(){
+            return 10;
+        }
+        function one (num) {
+            return 10 + num;
+        }
+        function two (num1,num2) {
+            return num1 + num2;
+        }
+        this.add = function () {
+            var arg = arguments,
+                len = arg.length;
+            switch (len) {
+                case 0:
+                    return zero();
+                case 1:
+                    return one.apply(null,arg);
+                case 2:
+                    return two.apply(null,arg);
+            }
+        }
+    }
+    var test = new Add();
+    console.log(test.add())
+    console.log(test.add(11))
+    console.log(test.add(18,20));
+
+</script>
+</body>
+</html>

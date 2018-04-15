@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        //声明父类
+        function SuperClass(){
+            this.superValue = true;
+        }
+        SuperClass.prototype.getSuperValue = function () {
+            return this.superValue;
+        }
+        //声明子类;
+        function SubClass () {
+            this.subValue = false;
+        }
+        //继承
+        SubClass.prototype = new SuperClass();
+        SubClass.prototype.getSubValue = function () {
+            return this.subValue;
+        }
+
+    </script>
+</body>
+</html>

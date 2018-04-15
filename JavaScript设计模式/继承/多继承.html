@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        //属性复制
+        var extend = function (target,source) {
+            for (var property in source) {
+                target[property] = source[property];
+            }
+            return target;
+        }
+        //多继承
+        var mix = function () {
+            var i=1,
+                len = arguments.length,
+                target = arguments[0],
+                arg;
+            for(;i<len;i++){
+                arg = arguments[i];
+                extend(target,arg);
+            }
+            return target;
+        }
+        //多继承：遍历属性复制;
+    </script>
+</body>
+</html>

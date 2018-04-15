@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        //父类
+        function SuperClass (id) {
+            this.books = ['JavaScript','html','css'];
+            this.id = id;
+        }
+
+        //父类原型方法;
+        SuperClass.prototype.showBooks = function () {
+            console.log(this.books);
+        }
+
+        //SubClass
+
+        function SubClass (id) {
+            SuperClass.call(this,id);
+        }
+
+        var book1 = new SubClass(1);
+        var book2 = new SubClass(2);
+        console.log(book1);
+        //父类原型方法不会被继承
+    </script>
+</body>
+</html>
