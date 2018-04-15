@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var Basketball = function () {
+        this.intro = '篮球盛行于美国'
+    }
+    Basketball.prototype = {
+        getMember: function () {
+            console.log('每个队伍需要5名队员');
+        },
+        getBallSize: function () {
+            console.log('球很大');
+        }
+    }
+    var FootBall = function () {
+        this.intro = '足球很流行'
+    }
+    var Tennis = function () {
+        this.intro = '每年有很多球赛'
+    }
+    //运动工厂;
+    var SportFactory = function (name) {
+        switch (name) {
+            case 'NBA':
+                return new Basketball();
+            case 'wordCup':
+                return new FootBall();
+            case 'frenchOpen':
+                return new Tennis();
+        }
+    }
+    var basketball = new SportFactory('frenchOpen');
+    console.log(basketball);
+
+
+    function createObj (intro,type) {
+        var o = new Object();
+        o.intro = intro;
+        switch (type) {
+            case 'NBA':
+                o.country = '美国';
+                break;
+            case 'CBA':
+                o.country = '中国';
+                o.getName = function () {};
+                break;
+        }
+        return o;
+    }
+    var obj = createObj('球类club','NBA');
+    console.log(obj);
+</script>
+</body>
+</html>
