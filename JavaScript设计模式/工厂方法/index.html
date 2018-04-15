@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var Factory = function (type,content) {
+        if (this instanceof Factory) {
+            var s = new this[type](content);
+        } else {
+            return new Factory(type,content);
+        }
+    }
+    Factory.prototype = {
+        Java:function (content) {
+            this.content = content;
+            (function (content) {
+                var div = document.createElement('div');
+                div.innerHTML = content;
+                div.style.border = '1px solid red';
+                document.body.appendChild(div);
+            })(content)
+        },
+        PHP:function (content) {
+            this.content = content;
+            (function (content) {
+                var div = document.createElement('div');
+                div.innerHTML = content;
+                div.style.border = '1px solid yellow';
+                document.body.appendChild(div);
+            })(content)
+        },
+        UI:function (content) {
+            this.content = content;
+            (function (content) {
+                var div = document.createElement('div');
+                div.innerHTML = content;
+                div.style.border = '1px solid #999999';
+                document.body.appendChild(div);
+            })(content)
+        },
+        JavaScript:function (content) {
+            this.content = content;
+            (function (content) {
+                var div = document.createElement('div');
+                div.innerHTML = content;
+                div.style.border = '1px solid #212121';
+                document.body.appendChild(div);
+            })(content)
+        }
+    }
+    var java = new Factory('Java','Java is Good');
+    var js = new Factory('JavaScript','JavaScript is Good');
+    var php = new Factory('PHP','PHP is Good');
+    var UI = new Factory('UI','UI is Good');
+</script>
+</body>
+</html>
