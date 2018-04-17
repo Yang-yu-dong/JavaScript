@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var Human = function (param) {
+        //skill技能
+        this.skill = param && param.skill || '保密';
+        this.hobby = param && param.hobby || '保密';
+    }
+    Human.prototype = {
+        getSkill:function () {
+            return this.skill
+        },
+        getHobby:function () {
+            return this.hobby
+        }
+    }
+
+    var Named = function (name) {
+        var that = this;
+        (function (name,that) {
+            that.wholeName = name;
+            if (name.indexOf(' ')> -1) {
+                that.firstName = name.slice(0,name.indexOf(' '));
+                that.lastName = name.slice(name.indexOf(' '));
+            }
+        })(name,that);
+    }
+
+    var Work = function (word) {
+        var that = this;
+        (function (work,that) {
+            switch (work) {
+                case 'code':
+                    that.work = '工程师';
+                    that.workDescript = 'xxxyyy';
+                    break;
+                case 'UI':
+                    that.work = '设计师';
+                    that.workDescript = '2222222';
+                    break;
+            }
+        })(work,that);
+    }
+    Work.prototype = {
+        changeWork:function (work) {
+            this.work = work
+        },
+        changeDescript:function (descript) {
+            this.workDescript = descript;
+        }
+    }
+
+    //建造者
+    var Person = function (name,work) {
+        var _person = new Human();
+        _person.name = new Named(name);
+        _person.work = new Work(work);
+        return _person;
+    }
+
+</script>
+</body>
+</html>
