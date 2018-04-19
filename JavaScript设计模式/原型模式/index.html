@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div></div>
+    <script>
+    //图片轮播类;
+     var LoopImages = function (imgArr,container) {
+         this.imagesArray = imgArr;
+         this.container = container;
+         this.createImage = function () {};
+         this.changeImage = function () {};
+     }
+    LoopImages.prototype.changeImage = function () {
+        console.log('change');
+    }
+    LoopImages.prototype.createImage = function () {
+        console.log('create');
+    }
+    LoopImages.prototype.getLength = function () {
+        console.log(this.imagesArray.length);
+    }
+    //上下滑动切换类
+    var SlideLoopImg = function (imgArr,container) {
+        LoopImages.apply(this,arguments);
+    }
+    SlideLoopImg.prototype = new LoopImages();
+    SlideLoopImg.prototype.changeImage = function (){
+        console.log('slideChange')
+    }
+    //渐隐切换类
+    var FadeLoopImg = function (imgArr,container,arrow) {
+        LoopImages.apply(this,arguments);
+        this.arrow = arrow;
+    }
+    FadeLoopImg.prototype = new LoopImages();
+    //可将
+    var fadeImg = new FadeLoopImg([
+        '1.jpg',
+        '2.jpg',
+        '3.jpg'],'slide',[
+            'left.jpg',
+            'right.jpg'
+        ]);
+    console.log(fadeImg.arrow);
+    fadeImg.getLength();
+    </script>
+</body>
+</html>
