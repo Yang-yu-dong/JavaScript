@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id="click">点击</button>
+    <script>
+        //对事件绑定兼容性进行封装;
+        var addEvent = function (dom,type,fn) {
+            if (dom.addEventListener) {
+                dom.addEventListener(type,fn);
+            } else if (dom.attachEvent) {
+                dom.attachEvent(type,fn,false);
+            } else {
+                dom['on'+type] = fn;
+            }
+        }
+        //对阻止默认事件进行封装;
+        var getEvent = function (event) {
+            return event || window.event;
+        }
+        var getTarget = function (e) {
+            var event = getEvent(e);
+            return event.target || event.srcElement;
+        }
+        var preventDefault = function (e) {
+            var event = getEvent(e);
+            event.preventDefault ? event.preventDefault() : event.returnValue = false;
+        }
+        addEvent(document.getElementById('click'),'click',()=>{console.log(111)});
+    
+    </script>
+</body>
+</html>
