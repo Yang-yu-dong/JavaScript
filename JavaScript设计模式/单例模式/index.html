@@ -14,20 +14,20 @@
         var Conf = (function () {
             var max_num = 10;
             return function () {
-                var o = new Object();
-                o.get = function () {
+                this.get = function () {
                     return max_num;
                 };
-                o.set = function (num) {
+                this.set = function (num) {
                     max_num = num
                 }
-                return o;
             }
         })();
         var conf = new Conf();
         var conf2 = new Conf();
         conf2.set(11);
-        console.log(conf.get());
+        conf.set(13);
+        console.log(conf.get());//13
+        console.log(conf2.get());//13
     </script>
 </body>
 </html>
