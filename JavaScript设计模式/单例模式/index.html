@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 单例模式通常用来实现命名空间，防止代码冲突 -->
+    <script>
+        //管理静态变量
+
+        var Conf = (function () {
+            var max_num = 10;
+            return function () {
+                var o = new Object();
+                o.get = function () {
+                    return max_num;
+                };
+                o.set = function (num) {
+                    max_num = num
+                }
+                return o;
+            }
+        })();
+        var conf = new Conf();
+        var conf2 = new Conf();
+        conf2.set(11);
+        console.log(conf.get());
+    </script>
+</body>
+</html>
