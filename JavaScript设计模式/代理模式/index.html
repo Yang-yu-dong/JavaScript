@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //通过img标签实现代理,统计的实现;
+        var Count = (function () {
+            var img = new Image();
+            return function (params) {
+                var src = 'http://www.baidu.com?';
+                for (var i in params) {
+                    src += i + '=' + params[i]+'&';
+                }
+                console.log(src);
+                img.src = src;
+            }
+        })();
+        Count({name:'yyd',age:'10'});
+        //JSONP实现
+        var JSONP = function ({
+            params,
+            callback,
+            url,
+            callbackKey
+        }) {
+            JSONP.callbackId = JSONP.callbackId || 1;
+            var params = params || {};
+            params[callbackKey] = `JSONP.callbacks[${JSONP.callbackId}]`;
+            JSONP.callbacks = JSONP.callbacks || [];
+            JSONP.callbacks[JSONP.callbackId] = callback;
+            const paramKeys = Object.keys(params);
+            const paramStr = paramKeys.map(key=>`${key}=${params[key]}`).join('&');
+            const script = document.createElement('script');
+            script.setAttribute('src', `${url}?${paramString}`)
+            document.body.appendChild(script)
+            JSONP.callbackId++
+        }
+    </script>
+</body>
+</html>
