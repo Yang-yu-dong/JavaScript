@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Speed(x,y){
+            this.x = x;
+            this.y = y;
+        }
+        Speed.prototype.run = function(){
+            console.log('running');
+        }
+        function Color(cl){
+            this.color = cl;
+        }
+        Color.prototype.draw = function () {
+            console.log('着色');
+        }
+        function Shape(sp){
+            this.shape = sp;
+        }
+        Shape.prototype.change = function () {
+            console.log('改变形状');
+        }
+        function Speek(wd){
+            this.word = wd;
+        }
+        Speek.prototype.say = function () {
+            console.log('Speek');
+        }
+        function Ball(x,y,c){
+            this.speed = new Speed(x,y);
+            this.color = c;
+        }
+        Ball.prototype.init = function (){
+            this.speed.run();
+            this.color.draw();
+        }
+        /*
+        *将实现层（如元素绑定事件）和抽象层解耦分离，两部分可以独立变化;
+        */
+    </script>
+</body>
+</html>
