@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container"></div>
+    <button id="next_page">下一页</div>
+    <script>
+        //数据、方法分离,效率提升,下面这个例子降div提升为公享用的;
+        //享元对象
+        var article = [
+            '11111',
+            '222222',
+            '333',
+            '444',
+            '55555',
+            '66666',
+            '777777',
+            '22212312222',
+            '99999'
+        ]
+        var Flyweight = function () {
+            var created = [];
+            function create() {
+                var dom = document.createElement('div');
+                document.getElementById('container').appendChild(dom);
+                created.push(dom);
+                return dom;
+            }
+            return {
+                getDiv:function () {
+                    if (created.length < 5) {
+                        return create()
+                    } else {
+                        var div = created.shift();
+                        created.push(div);
+                        return div;
+                    }
+                }
+            }
+        }
+        Flyweight = new Flyweight();
+        var paper = 0,num=5,len=article.length;
+        for (var i = 0;i<len;i++) {
+            Flyweight.getDiv().innerHTML = article[i]
+        }
+        document.getElementById('next_page').onclick = function () {
+            if (article.length < 5) {
+                return false;
+            }
+            var n = ++paper * num % len,j=0;
+            for(;j<5;j++){
+                if (article[n+j]) {
+                    Flyweight.getDiv().innerHTML = article[n+j];
+                } else if (article[n+j-len]){
+                    Flyweight.getDiv().innerHTML = article[n+j-len];
+                } else {
+                    Flyweight.getDiv().innerHTML = "";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
