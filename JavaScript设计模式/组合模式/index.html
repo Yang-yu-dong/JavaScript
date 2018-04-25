@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function inheritObject(o){
+            function F () {};
+            F.prototype = o;
+            return o;
+        }
+        function inheritPrototyle(subClass,superClass){
+            var p = inheritObject(superClass.prototype);
+            p.constructor = subClass;
+            subClass.prototype = p;
+        }
+        //定义虚拟父类
+        var News = function (){
+            this.children = [];
+            this.element = null;
+        }
+        News.prototype = {
+            init:function () {
+                throw new Error();
+            },
+            add:function (){
+                throw new Error();
+            },
+            getElement:function () {
+                throw new Error();
+            }
+        }
+        //容器类
+        var Container = function (id,parent) {
+            News.call(this);
+            this.id = id;
+            this.parent = parent;
+            this.init();
+        }
+        //构建方法
+        Container.prototype.init = function () {
+            this.element = document.createElement('ul');
+            this.element.id = this.id;
+            this.element.className = 'new-container';
+        }
+        
+        //添加子元素方法;
+        Container.prototype.add = function (children) {
+            this.children.push(children);
+            this.element.appendChild(children.getElement());
+            return this;
+        }
+        Container.prototype.getElement = function () {
+            return this.element;
+        }
+        Container.prototype.show = function () {
+            this.parent.appendChild(this.element);
+        }
+
+        var Item = function (className) {
+            News.call(this);
+            this.className = className;
+            this.init();
+        }
+        inheritObject(Item,News);
+        Item.prototype.init = function () {
+            this.element = document.createElement('li');
+            this.element.className = this.className;
+        }
+        Item.prototype.add = function (children) {
+            this.children.push(children);
+            this.element.appendChild(children.getElement());
+            return this;
+        }
+        Item.prototype.getElement = function () {
+            return this.element;
+        }
+        var NewsGroup = function (className) {
+            News.call(this);
+            this.className = className || "";
+            this.init();
+        }
+        inheritObject(NewsGroup,News);
+        NewsGroup.prototype.init = function () {
+            this.element = document.createElement('div');
+            this.element.className = this.className;
+        }
+        NewsGroup.prototype.add = function (child){
+            this.children.push(child);
+            this.element.appendChild(child.getElement());
+            return this;
+        }
+        NewsGroup.getElement = function (){
+            return this.element;
+        }
+        var ImageNews = function (url,href,className) {
+            News.call(this);
+            this.url = url || '';
+            this.href = href || '';
+            this.className = className || '';
+            this.init();
+        }
+        inheritObject(ImageNews,News);
+
+        ImageNews.prototype.init = function () {
+            this.element = document.createElement('a');
+            this.element.href = this.href;
+            var img = new Image();
+            img.src = this.url;
+            this.element.appendChild(img);
+            this.element.className = 'image-news' + this.className;
+        }
+        ImageNews.prototype.add = function (){};
+        ImageNews.prototype.getElement = function (){
+            return this.element;
+        }
+        var news1 = new Container('news',document.body);
+        news1.add(new Item('normal').add(new ImageNews('http://www.baidu.com/img/bd_logo.png','http://www.baidu.com/img/bd_logo.png','baidu'))).add(new Item('normal').add(new ImageNews('http://www.baidu.com/img/bd_logo.png','http://www.baidu.com/img/bd_logo.png','baidu'))).show();
+    </script>
+</body>
+</html>
