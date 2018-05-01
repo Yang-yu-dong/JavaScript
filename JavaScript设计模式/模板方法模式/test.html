@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id=nav></div>
+    <!-- 多类导航 -->
+    <script>
+        //格式化字符串方法
+        function formateString(str,data){
+            return str.replace(/\{#(\w+)#\}/g,function (match,key) {
+                return typeof data[key] === undefined ?'':data[key]
+            });
+        }
+        //基础导航
+        var Nav = function (data) {
+            var item = '<a href="{#href#}" title="{#title#}">{#name#}</a>'
+            //创建字符串
+
+            var html = '';
+            for(var i=0,len=data.length;i<len;i++){
+                html +=formateString(item,data[i]);
+            }
+            return html;
+        }
+        var nav = document.getElementById('nav');
+        nav.innerHTML = Nav([
+            {
+                href:'www.baidu.com',
+                title:'baidu',
+                name:'baidu'
+            },
+            {
+                href:'www.baidu.com',
+                title:'baidu',
+                name:'baidu'
+            },
+            {
+                href:'www.baidu.com',
+                title:'baidu',
+                name:'baidu'
+            }
+        ]);
+    </script>
+</body>
+</html>

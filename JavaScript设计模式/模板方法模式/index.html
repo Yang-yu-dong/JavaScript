@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    //创建一个基础类，子类在基础类上扩展;
+
+    var Alert = function (data) {
+        if (!data) {
+            return false;
+        }
+        //设置内容
+        this.content = data.content;
+        //提示内容组件;
+        this.pannel = document.createElement('div');
+        this.contentNode = document.createElement('p');
+        this.confirmBtn = document.createElement('span');
+        this.closeBtn = document.createElement('b');
+        this.pannel.className = 'alert';
+        this.closeBtn.className = 'a-close';
+        this.confirmBtn.className = 'a-confirm';
+        this.confirmBtn.innerHTML = data.confirm || 'Confirm';
+        this.contentNode.innerHTML = this.content;
+        this.success = data.success || function () {};
+        this.fail = data.fail || function () {};
+    }
+    
+
+    Alert.prototype = {
+        init:function () {
+            this.pannel.appendChild(this.closeBtn);
+            this.pannel.appendChild(this.contentNode);
+            this.pannel.appendChild(this.confirmBtn);
+            document.body.appendChild(this.pannel);
+            //绑定事件
+            this.bindEvent();
+            this.show();
+        },
+        bindEvent:function () {
+            var that = this;
+            this.closeBtn.onclick=function () {
+                that.fail();
+                that.hide();
+            }
+            this.confirmBtn.onclick = function () {
+                that.success();
+                that.hide();
+            }
+        },
+        show:function () {
+            this.pannel.style.display = 'block';
+        },
+        hide:function () {
+            this.pannel.style.display = 'none';
+        }
+    }
+    var RightAlert = function (data) {
+        Alert.call(this,data);
+        this.confirmBtn.className = this.confirmBtn.className + ' right';
+    }
+    RightAlert.prototype = new Alert();
+
+    var alert = new RightAlert({content:'111'});
+    alert.init();
+    alert.hide()
+
+    </script>
+</body>
+</html>
