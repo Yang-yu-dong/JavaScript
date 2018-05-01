@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <style>
+        li{
+            list-style: none;
+        }
+        #msg>li>span{
+            display: inline-block;
+            padding: 10px;
+            vertical-align: top;
+            background: tan;
+            cursor: pointer
+        }
+    </style>
+
+    <div>数目<span id=msg_num></span></div>
+    <div id=msg></div>
+    <textarea  id="user_input" cols="30" rows="10"></textarea>
+    <input type="submit" value="tijiao" id="user_submit">
+    <script>
+    //观察者
+
+    var Observer = new function () {
+        //消息容器
+        var _message = {};
+        this.regist = function (type,fn) {
+            /*
+            * 注册消息
+            * type：类型
+            * fn：执行动作
+            */
+            if (typeof _message[type] === 'undefined') {
+                _message[type] = [fn]
+            } else {
+                _message[type].push(fn);
+            }
+            return this;
+        };
+        this.fire = function (type,args) {
+            /*
+             *发布消息
+             *type：类型
+             *args：参数
+             */
+            if (!_message[type]) {
+                return;
+            }
+            var events = {
+                type:type,
+                args:args
+            },
+            i=0,
+            len=_message[type].length;
+            for(;i<len;i++){
+                _message[type][i].call(this,events);
+            }
+            return this;
+        };   
+        this.remove = function (type,fn) {
+            /*
+             *注销事件
+             *type：类型
+             *fn：动作
+             */ 
+            if (_message[type] instanceof Array) {
+                var i = _message[type].length - 1;
+                for(;i>0;i--){
+                    _message[typoe][i] === fn && _message[type].splice(i,1);
+                }
+            }
+            return this;
+        };
+    };
+
+
+    function $(id){
+        return document.getElementById(id);
+    }
+
+
+    //追加消息
+    (function () {
+        //追加一则消息;
+        function addMessage(e){
+            var text = e.args.text;
+            var ul = $('msg'),
+            li = document.createElement('li'),
+            span = document.createElement('span');
+            li.innerHTML = text;
+            span.onclick = function () {
+                ul.removeChild(li);
+                //发布删除留言消息
+                Observer.fire('removeCommentMessage',{
+                    num:-1
+                });
+            }
+            li.appendChild(span);
+            ul.appendChild(li);
+        }
+        Observer.regist('addCommentMessage',addMessage);
+    })();
+
+
+    //更改用户消息数量;
+    (function () {
+        function changeMsgNum(e) {
+            var num = e.args.num;
+            var numBox = $('msg_num');
+            var currentNum = numBox.innerHTML || 0;
+            numBox.innerHTML = parseInt(currentNum) + num;
+        }
+        Observer.regist('addCommentMessage',changeMsgNum).regist('removeCommentMessage',changeMsgNum);
+    })();
+    
+
+    //用户提交
+    (function () {
+        $('user_submit').onclick = function () {
+            var text = $('user_input');
+            if (text.value === '') {
+                return;
+            }
+            Observer.fire('addCommentMessage',{
+                num:1,
+                text:text.value
+            })
+            text.value = '';
+        }
+    })();
+    </script>
+</body>
+</html>
