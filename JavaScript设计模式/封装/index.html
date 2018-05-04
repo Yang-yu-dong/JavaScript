@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //实现静态变量;
+        var Static = (function () {
+            var num = 10;
+            return function () {
+                this.getNum = function () {
+                    return num;
+                };
+                this.setNum = function (number) {
+                    num = number;
+                }
+                if (num === 111) {
+                    console.log('111');
+                }
+            }
+        })();
+        var num1 = new Static();
+        num1.setNum(111);
+        var num2 = new Static();
+
+        console.log(num2.getNum());
+    
+    </script>
+</body>
+</html>

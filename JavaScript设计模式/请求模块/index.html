@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!--  -->
+    <script>
+    /*
+     *异步请求对象
+     *data：请求数据
+     *dealType 相应数据处理对象
+     *dom 事件源
+     */
+    var sendData = function (data,dealType,dom){
+        var xhr = new XMLHttpRequest(),
+        url = 'getData.php?mod=userInfo';
+        xhr.onload = function (event) {
+            if ((xhr.status >=200 && xhr.status < 300) || xhr.status === 304 ) {
+                dealData(xhr.responseText,dealType,dom);
+            } else {
+                //请求失败
+            }
+        }
+        for(var i in data){
+            url += '&' + i + '=' + data[i];
+        }
+        xhr.open('get',url,true);
+        xhr.send();
+    }
+
+    /*
+     *异步请求对象
+     *data：请求数据
+     *dealType 相应数据处理对象
+     *dom 事件源
+     */
+    var dealData = function () {}
+    
+    </script>
+</body>
+</html>
