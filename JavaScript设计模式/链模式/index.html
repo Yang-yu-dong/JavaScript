@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id=demo></div>
+    <div id=test></div>
+    <script>
+        var A = function (selector,context) {
+            return new A.fn.init(selector,context);
+        }
+        A.fn = A.prototype = {
+            constructor:A,
+            init:function (selector,context) {
+                this.length = 0;
+                context = context || document;
+                if (~selector.indexOg('#')) {
+                    this[0] = document.getElementById(selector.slice(1));
+                    this.length = 1;
+                } else {
+                    var doms = context.getElementsByTagName(selector),
+                        i=0,len=doms.length;
+                    for(;i<len;i++){
+                        this[i] = doms[i]
+                    }
+                    this.length = len;
+                }
+                this.context = context;
+                this.selector = selector; 
+                return this;
+            },
+            length: 0,
+            size:function () {
+                return this.length;
+            },
+            push:[].push,
+            splice:[].splice,
+            forEach:[].forEach
+        }
+        A.extend = A.fn.extend = function () {
+            var i = 1,j,
+            len = arguments.length,
+            target = arguments[0];
+            if (i === len) {
+                target = this;
+                i--;
+            }
+            for (;i<len;i++) {
+                for(j in arguments[i]) {
+                    target[j] = arguments[i][j];
+                }
+            }
+            return target;
+        }
+            A.fn.init.prototype = A.fn;
+        var demo= A('demo');
+        var test = A('test');
+        console.log(demo);
+        console.log(test);
+    
+    </script>
+</body>
+</html>

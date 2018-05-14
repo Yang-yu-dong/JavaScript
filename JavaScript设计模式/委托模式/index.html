@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 内存泄漏问题 -->
+    <div id=btn_container>
+        <button id=btn>点击</button>
+    </div>
+    <script>
+        var g = function (id) {
+            return document.getElementById(id);
+        }
+        // g('id').onclick = function () {
+        //     g('btn_container').innerHTML = '11111';
+        // }
+        // 因为在替换掉div内容的时候按钮点击事件并没有清除，会导致内存泄漏问题;
+        //解决方法事件委托
+        
+    </script>
+</body>
+</html>

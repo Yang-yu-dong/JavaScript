@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+    #test{
+        width: 100px;
+        height: 100px;
+        border: 1px solid #e2e2e2;
+    }
+    
+    </style>
+    <div id="test"></div>
+    <script>
+    //适用场景：减少重复的分支判断
+    var A = {};
+    A.on = (function (dom,type,fn) {
+        if (document.addEventListener) {
+            return function (dom,type,fn) {
+                dom.addEventListener(type,fn,false);
+            }
+        } else if (document.attachEvent) {
+            return function (dom,type,fn) {
+                dom.attachEvent('on'+type,fn);
+            }
+        } else {
+            dom['on'+type] = fn;
+        }
+    })();
+
+
+    //第二种方法：惰性执行
+
+    A.on = function (dom,type,fn) {
+        if (document.addEventListener) {
+            A.on = function (dom,type,fn) {
+                dom.addEventListener(type,fn,false);
+            }
+         }  else if (document.attachEvent) {
+            A.on =  function (dom,type,fn) {
+                dom.attachEvent('on'+type,fn);
+            }
+        } else {
+            A.on = function (dom,type,fn) {
+                domp['on'+click] = fn;
+            }
+        }
+        A.on(dom,type,fn);
+    }
+    A.getStyle = (function (dom) {
+        if (document.currentStyle) {
+            return function (dom) {
+                return dom.currentStyle;
+            }
+        } else if (window.getComputedStyle) {
+            return function (dom) {
+                return window.getComputedStyle(dom);
+            }
+        }
+    })();
+    var test = document.getElementById('test');
+    console.log(test);
+    console.log(A.getStyle(test).height);
+    
+    
+    </script>
+</body>
+</html>

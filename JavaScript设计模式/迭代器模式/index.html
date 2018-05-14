@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <ul id=container>
+            <li class="li1"></li>
+            <li class="li2"></li>
+            <li class="li3"></li>
+            <li class="li4"></li>
+    </ul>
+    <script>
+
+        var Iterator = function (items,container) {
+            var container = container && document.getElementById(container) || document,
+                items = container.getElementsByTagName(items),
+                length = items.length,
+                index = 0
+            var splice = [].splice;
+            return {
+                //第一个元素
+                first:function () {
+                    index = 0;
+                    return items[index];
+                },
+                //最后一个
+                last:function () {
+                    index = length - 1;
+                    return items[index];
+                },
+                //获取前一个
+                pre:function () {
+                    if (--index > 0) {
+                        return items[index];
+                    } else {
+                        index = 0;
+                        return null;
+                    }
+                },
+                //获取后一个元素
+                next:function () {
+                    if (++index < length) {
+                        return items[index];
+                    } else {
+                        index = length - 1;
+                        return null;
+                    }
+                },
+                //获取某一个元素
+                get:function (num) {
+                    index = num >= 0 ? num % length : num % length - length
+                    return items[index];
+                },
+                //对每一个元素执行某一个方法
+                dealEach:function (fn) {
+                    var args = splice.call(arguments,1);
+                    for (var i = 0, len=items.length; i < len; i++) {
+                        fn.apply(items[i],args);
+                    }
+                },
+                //对某一个元素执行某一个方法
+                dealItem:function (num,fn) {
+                    fn.apply(this.get(num),splice.call(arguments,2));
+                },
+                //排他方式处理某一个元素
+                exclusive:function (num,allFn,numFn) {
+                    this.dealEach(allFn);
+                    if (Object.prototype.toString.call(num) === '[object Array]') {
+                        for (var i =0, len = num.length;i < len; i++) {
+                            this.dealItem(num[i],numFn);
+                        }
+                    } else {
+                        this.dealItem(num,numFn);
+                    }
+                }
+            }
+        };
+    
+        //数组迭代器;
+        var eachArray = function (arr,fn) {
+            var i = 0,len=arr.length;
+            for (;i<len;i++) {
+                if (fn.call(arr[i],arr[i],i) === false) {
+                    break;
+                }
+            }
+        }
+
+        //对象迭代器
+
+        var eachObject = function (obj,fn) {
+            for (var i in obj) {
+                if (fn.call(obj[i],obj[i],i)===false) {
+                    break;
+                }
+            }
+        }
+        var arr = [1,2,3,4,5];
+        eachArray(arr,function (item,index) {
+            console.log(index);
+        })
+        var obj = {
+            name:'as',
+            sex:'man',
+            age:16
+        }
+        eachObject(obj,function (value,key) {
+            console.log(key);
+        });
+
+        //同步变量迭代器取值;
+        AGetter = function (A,key) {
+            if (!A) {
+                return undefined;
+            }
+            var result = A;
+            key = key.split('.');
+            for(var i = 0,len = key.length;i<len;i++){
+                console.log(result);
+                if (result[key[i]] !== undefined) {
+                    result = result[key[i]];
+                } else {
+                    result = undefined;
+                    break;
+                }
+            }
+            return result;
+        }
+        var A = {
+            name:"yyd",
+            value:{
+                sex:1,
+                age:{
+                    old:17,
+                    newL:18
+                }
+            }
+        }
+        console.log(AGetter(A,'name.sex.a.b'));
+    </script>
+</body>
+</html>

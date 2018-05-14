@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //数据管理器
+
+
+        /**
+         * 本地存储类
+         * preId 数据库前缀
+         * timeSign 时间戳与存储数据之间的拼接符
+         **/
+        
+        var BaseLocalStorage = function (preId, timeSign) {
+            this.preId = preId;
+            this.timeSign = timeSign;
+        }
+    
+        BaseLocalStorage.prototype = {
+            status:{
+                SUCCESS:0,//成功
+                FAILURE:1,//fail
+                OVERFLOW:2,//溢出
+                TIMEOUT:3//超时
+            },
+            storage:localStorage || window.localStorage,
+            getKey:function (key) {
+                return this.preId + key;
+            },
+            set:function (key, value, callback, time) {
+                var status = this.status.SUCCESS,
+                    key = this.getKey(key);
+                try {
+                    time = new Date(time).getTime() || time.getTime();
+                } catch (e) {
+                    time = new Date().getTime() + 1000 * 60 * 60 * 24 * 31;
+                }
+
+                try {
+                    this.storage.setItem(key,time + this.timeSign + value);
+                } catch (e) {
+                    status = this.status.OVERFLOWL
+                }
+                callback && callback.call(this, status, key, value);
+            },
+            get:function (key,callback) {
+                var status = this.status.SUCCESS,
+                    key = this.getKey(key),
+                    value = null,
+                    timeSignLen = this.timeSign.length,
+                    that = this,
+                    index,
+                    time,
+                    result,
+                try{
+                    value = that.storage.getItem(key);
+                }catch(e){
+                    result = {
+                        status:that.status.FAILURE,
+                        value:null
+                    }
+                    callback && callback.call(this,result.status,result.value);
+                    return result;
+                }
+                if (value) {
+                    index = value.indexOf(that.timeSign);
+                    time = +value.slice(0,index);
+            
+                }
+            },
+            remove:function (key,callback) {
+
+            }
+        }
+
+    </script>
+</body>
+</html>

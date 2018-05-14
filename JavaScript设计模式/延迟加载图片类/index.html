@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         *节流延迟加载图片类
+         *param id 延迟加载图片的容器id
+         *注: 图片格式如下<img src="img/loading.gif" alt="" data-src="img/1.jpg">
+         **/
+        function LazyLoad (id) {
+            this.container = document.getElementById(id);
+            this.imgs = this.getImgs();
+            this.init();
+        }
+        LazyLoad.prototype.init = {
+            init:function () {
+                this.update();
+                this.bindEvent();
+            },
+            getImgs:function () {
+                var arr = [];
+                var imgs = this.container.getElementsByTagName('img');
+                for (var i =0,len=imgs.length;i<len;i++) {
+                    arr.push(imgs[i]);
+                }
+                return arr;
+            },
+            update:function () {
+                if (!this.imgs.length) {
+                    return false;
+                }
+                var i = this.imgs.length;
+                for (--i;i>0;i--) {
+                    if (this.shouldShow(i)) {
+                        this.imgs[i].src = this.imgs[i].getAttribute('data-src');
+                        this.imgs.splice(i, 1);
+                    }
+                }
+            },
+            shouldShow:function (i) {
+                var img = this.imgs[i],
+                    scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+                    scrollBottom = scrollTop + document.documentElement.clientHeight,
+                    imgTop = this.pageY(img),
+                    imgBottom = imgTop + img.offsetHeight;
+                //判断逻辑：
+                //图片底部高度大于可视视图顶部高度并且图片底部高度小于可视视图底部高度或者
+                //图片顶部高度大于可视视图顶部高度并且图片顶部高度小于可视视图底部高度
+                if (imgBottom > scrollTop && imgBottom < scrollBottom || (imgTop > scrollTop && imgTop < scrollBottom)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            pageY:function (element) {
+                if (element) {
+                    if (element.offsetParent) {
+                        return element.offsetHeight + this.pageY(element.offsetParent);
+                    } else {
+                        return element.offsetTop;
+                    }
+                }
+            },
+            on:function (element,type,fn) {},
+            bindEvent:function () {}
+        }
+    </script>
+</body>
+</html>
