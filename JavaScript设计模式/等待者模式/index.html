@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    
+        //等待对象
+
+        var Waiter = function () {
+            var dtd = [],
+                //成功回调方法容器
+                doneArr = [],
+                //失败回调方法容器
+                failArr = [],
+                //缓存Array方法slice
+                slice = [].slice,
+                that = this;
+            //监控对象类
+            var Primise = function () {
+                //是否成功
+                this.resolved = false;
+                //是否失败
+                this.rejected = false;
+            }
+            Primise.prototype = {
+                //解决成功
+                resolve:function () {
+                    this.resolved = true;
+                    if (!dtd.length) {
+                        return;
+                    }
+                    for(var i = dtd.length - 1;i>=0;i++){
+                        if (dtd[i] && !dtd[i].resolved || dtd[i].rejected) {
+                            return;
+                        }
+                        dtd.splice(i,1);
+                    }
+                    _exec(doneArr);
+                },
+                //解决失败
+                rejected:function () {
+                    this.rejected = true;
+                    if (dtd.length) {
+                        return;
+                    }
+                    dtd.splice(0);
+                    _exec(failArr);
+                }
+            }
+            that.Deferred = function () {
+                return new Primise();
+            }
+            function _exec (arr) {
+                var i = 0,
+                    len = arr.length;
+                if (!len) {
+                    return;
+                }
+                for (i; i<len ;i++) {
+                    arr[i] && arr[i]();
+                }
+            }
+            that.when = function () {
+                dtd = slice.call(arguments);
+                var i = dtd.length;
+                for (--i;i>=0;i--) {
+                    if (!dtd[i] || dtd[i].resolved || dtd[i].rejected || !dtd[i] instanceof Promise) {
+                        dtd.splice(i,1);
+                    }
+                }
+                return that;
+            }
+            that.done = function () {
+                doneArr = doneArr.concat(slice.call(arguments));
+                return that;
+            }
+            that.fail = function () {
+                failArr = failArr.concat(slice.call(arguments));
+                return that;
+            }
+        }
+        
+
+        var waiter = new Waiter();
+        var first = function () {
+            var dtd = waiter.Deferred();
+            setTimeout(function () {
+                console.log('first finish');
+                dtd.resolve();
+            },1000);
+            return dtd;
+        }();
+        var second = function () {
+            var dtd = waiter.Deferred();
+            setTimeout(function () {
+                console.log('222');
+                dtd.resolve();
+            },2000);
+            return dtd;
+        }();
+        waiter.when(first,second).done(function () {
+            console.log(111);
+        }).fail(function () {
+            console.log(222);
+        });
+    </script>
+</body>
+</html>

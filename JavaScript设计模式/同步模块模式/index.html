@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id=test></div>
+    <script>
+        var F = F || {};
+        F.define = function (str,fn) {
+            var parts = str.split('.'),
+                old = parent = this,
+                i = len = 0;
+
+
+            if (parts[0] === 'define' || parts[0] === 'module') {
+                return;
+            }
+
+            for (len = parts.length; i < len; i++) {
+                if (typeof parent[parts[i]] === 'undefined') {
+                    parent[parts[i]] = {};
+                }
+                old = parent;
+                parent = parent[parts[i]];
+            }
+            if (fn) {
+                old[parts[--i]] = fn();
+            }
+            return this;
+        };
+        F.define('string.name',function () {
+            return {
+                trim:function (str) {
+                    return str.replace(/^\s+|\s+$/,'');
+                }
+            }
+        });
+        F.module = function () {
+            var args = [].slice.call(arguments);
+            var fn = args.pop(),
+                parts = args[0] && args[0] instanceof Array ? args[0]: args,
+                modules = [],
+                modIds = '',
+                i=0,
+                ilen = parts.length,
+                parent,j,jlen;
+                while(i < ilen){
+                    if (typeof parts[i] === 'string') {
+                        parent = this;
+                        modIds = parts[i].replace(/^F\./,'').split('.');
+                        for (j = 0,jlen = modIds.length;j<jlen;j++) {
+                            parent = parent[modIds[j]] || false;
+                        }
+                        modules.push(parent);
+
+                    } else {
+                        modules.push(parts[i]);
+                    }
+                    i++;
+                }
+                fn.apply(null,modules);
+        }
+        F.define('dom',function () {
+            var $ = function (id) {
+                $.dom = document.getElementById(id);
+                return $;
+            }
+            $.html = function (html) {
+                if (html) {
+                    this.dom.innerHTML = html;
+                    return this;
+                } else {
+                    return this.dom.innerHTML;
+                }
+            }
+            return $;
+        });
+        F.module(['dom',document],function (dom,doc) {
+            dom('test').html('new add!');
+            console.log(doc);
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //函数绑定
+        function bind(fn,context) {
+            return function () {
+                return fn.apply(context,arguments);
+            }
+        }
+
+        //函数柯里化
+
+        function curry(fn){
+            var Slice = [].slice;
+            var args = Slice.call(arguments,1);
+            return function () {
+                var addArgs = Slice.call(arguments);
+                var allArgs = args.concat(addArgs);
+                return fn.apply(null,allArgs);6
+            }
+        }
+
+        //重写bind
+
+        function bind (fn,context) {
+            var Slice = Array.prototype.slice;
+            var args = Slice.call(arguments,2);
+            return function () {
+                var addArgs = Slice.call(arguments);
+                var allArgs = addArgs.concat(args);
+                return fn.apply(context,allArgs);
+            }
+        }
+
+        //兼容版本判断浏览器是否支持function.bind();
+        if(Function.prototype.bind === undefined){
+            Function.prototype.bind = function (context) {
+                var Slice = [].slice();
+                var args = Slice.call(arguments,1);
+                var that = this;
+                return function () {
+                    var addArgs = Slice.call(arguments);
+                    var allArgs = addArgs.concat(args);
+                    return that.apply(context,allArgs);
+                }
+            }
+        }
+    
+    </script>
+</body>
+</html>
