@@ -53,7 +53,7 @@
                     loadScript(getUrl(moduleName));
                 }
             };
-        F.module = function (url, modDeps, modCallback) {
+            F.module = function (url, modDeps, modCallback) {
             //降参数转化成数组
             var args = [].slice.call(arguments),
                 //回调函数,最后一个参数,
@@ -92,10 +92,7 @@
         }
     })((function () {
         return window.F = {};
-    })())
-    F.module(['lib/event','lib/dom'],function (event,dom) {
-        console.log(arguments);
-    });
+    })());
     </script>
 </body>
 </html>
