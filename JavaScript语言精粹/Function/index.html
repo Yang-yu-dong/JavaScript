@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<!-- 汉诺塔 -->
+<div id="test">
+    <div>
+        <li></li>
+        <li></li>
+    </div>
+    <div>
+        <a href=""></a>
+    </div>
+    <div>
+        <p></p>
+    </div>
+    <div>
+        <div></div>
+    </div>
+</div>
+    <script>
+        var hanoi = function (disc, src, aux, dst) {
+            if (disc > 0) {
+                hanoi(disc -1,src,dst,aux);
+                document.writeln('Move disc '+disc + ' from' + src + ' to ' + dst + '</br>');
+                hanoi(disc - 1,aux,src,dst); 
+            }
+        }
+        hanoi(3,'SRC','AUX','DST');
+
+        //
+        var walk_the_dom = function (node,func) {
+            func(node);
+            node = node.firstChild;
+            while (node) {
+                func(node);
+                node = node.nextSibling;
+            }
+        }
+        var node = document.getElementById('test');
+        walk_the_dom(node,function (node) {
+            console.log(node);
+        });
+    </script>
+</body>
+</html>

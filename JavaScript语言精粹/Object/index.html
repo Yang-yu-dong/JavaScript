@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var eventuality = function (that) {
+            var registry = {};
+            that.fire = function (event) {
+
+                var array,func,handler,u,type = typeof event === 'string' ? event : event.type;
+                if (registry.hasOwnProperty(type)) {
+                    array = registry[type];
+                    for (i = 0;i<array.length;i++) {
+                        handler = array[i];
+                        func = handler.method;
+                        if (typeof func === 'string') {
+                            func = this[func];
+                        }
+                        func.apply(this,handler.paraments || [event]);
+                    }
+                }
+                return this;
+            }
+            that.on = function (type,method,paraments) {
+                var handler = {
+                    method:method,
+                    paraments:paraments
+                }
+                if (registry.hasOwnProperty(type)) {
+                    registry[type].push(handler);
+                } else {
+                    registry[type] = [handler];
+                }
+                return this;
+            }
+            return that;
+        }
+        var is_array = function (arr) {
+            return Object.prototype.toString.apply(arr) === '[object Array]';
+        }
+        var obj = {};
+        eventuality(obj).on('click',function (event) {
+        },[1,2,3]).fire({
+            type:'click'
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../program.js"></script>
+</head>
+<body>
+    <script>
+        Function.method('new', function () {
+
+            var that = Object.create(this.prototype);
+
+            var other = this.apply(that, arguments);
+
+            return (typeof other === 'object' && other) || that;
+        });
+        
+        var Mamal = function (name) {
+            this.name = name;
+        }
+        Mamal.prototype.get_name = function () {
+            return this.name;
+        }
+        Mamal.prototype.set_name = function (name) {
+            this.name = name;
+        }
+        var myMamal = new Mamal('dongdong');
+
+        var Cat = function (name) {
+            this.name = name;
+            this.saying = 'meow';
+        }
+        Cat.prototype = new Mamal();
+        Cat.prototype.purr = function (n) {
+            var i,s = '';
+            for (i = 0; i< n ; i+=1) {
+                if (s) {
+                    s += '-';
+                }
+                s += 'r';
+            }
+            return s;
+        }
+        Cat.prototype.get_name = function () {
+            return this.name + '____' + this.saying;
+        }
+        var myCat = new Cat('cat');
+        myCat.set_name('2222');
+        console.log(myCat.get_name());
+    </script>
+</body>
+</html>
